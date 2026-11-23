@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["JobFinder.sln", "./"]
+COPY ["src/JobFinder.Domain/JobFinder.Domain.csproj", "src/JobFinder.Domain/"]
+COPY ["src/JobFinder.Application/JobFinder.Application.csproj", "src/JobFinder.Application/"]
+COPY ["src/JobFinder.Infrastructure/JobFinder.Infrastructure.csproj", "src/JobFinder.Infrastructure/"]
+COPY ["src/JobFinder.Persistence/JobFinder.Persistence.csproj", "src/JobFinder.Persistence/"]
+COPY ["src/JobFinder.Worker/JobFinder.Worker.csproj", "src/JobFinder.Worker/"]
+RUN dotnet restore "src/JobFinder.Worker/JobFinder.Worker.csproj"
+COPY . .
+RUN dotnet publish "src/JobFinder.Worker/JobFinder.Worker.csproj" -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/runtime:9.0 AS runtime
+WORKDIR /app
+RUN mkdir -p /app/data
+COPY --from=build /app/publish .
+ENV ConnectionStrings__JobFinder="Data Source=/app/data/jobfinder.db"
+ENTRYPOINT ["dotnet", "JobFinder.Worker.dll"]

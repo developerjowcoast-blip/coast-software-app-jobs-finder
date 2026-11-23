@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-JobFinder.Worker-daf4d32a-ec13-4936-bc36-83ab7ac99ace</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JobFinder.Application\JobFinder.Application.csproj" />
+    <ProjectReference Include="..\JobFinder.Infrastructure\JobFinder.Infrastructure.csproj" />
+    <ProjectReference Include="..\JobFinder.Persistence\JobFinder.Persistence.csproj" />
+  </ItemGroup>
+</Project>
